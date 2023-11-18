@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="AvlTree.cpp" />
     <ClCompile Include="BinSearchTree.cpp" />
+    <ClCompile Include="Functions.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RedBlackTree.cpp" />
     <ClCompile Include="WorkTree.cpp" />
@@ -138,7 +139,9 @@
     <ClInclude Include="AvlTree.h" />
     <ClInclude Include="BinSearchTree.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Functions.h" />
     <ClInclude Include="RedBlackTree.h" />
+    <ClInclude Include="Tree.h" />
     <ClInclude Include="WorkTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
