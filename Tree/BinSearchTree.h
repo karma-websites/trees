@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Tree.h"
 
 
@@ -11,13 +12,10 @@ private:
 
 	BsNode* left, * right, * parent;
 	int key;
-	int countKeys;
 
 	BsNode(int key, BsNode * parent = nullptr,
 		BsNode* left = nullptr, BsNode* right = nullptr)
-		: key(key), parent(parent), left(left), right(right), countKeys(1) {}
-
-	int getCountKey() const { return countKeys; }
+		: key(key), parent(parent), left(left), right(right) {}
 };
 
 
@@ -30,5 +28,6 @@ public:
 
 private:
 
+	// Метод удаления элемента
 	void innerDeleteElem(BsNode*& node);
 };

@@ -34,7 +34,7 @@ int getFillMode()
     while (true)
     {
         fill_mode = getValue();
-        if (fill_mode == 0 || fill_mode == 1)
+        if (fill_mode == 1 || fill_mode == 2)
         {
             break;
         }
@@ -44,5 +44,5 @@ int getFillMode()
         }
     }
     cout << endl;
-    return fill_mode;
+    return --fill_mode;
 }

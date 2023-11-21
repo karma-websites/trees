@@ -10,7 +10,6 @@
 
 using namespace std;
 
-
 /*
 	Объявление шаблонного класса
 */
@@ -22,25 +21,25 @@ public:
 
 	Tree() : root(nullptr), countNodes(0) {}
 	~Tree()
-	{ 
+	{
 		deleteTreeOptim();
 	}
 
 	// Метод заполнения дерева случайными или отсортированными данными
-	bool fillTree(const int size, const int fillMode);
+	bool fillTree(vector<int>& vec, const int size, const int fillMode);
 
-	// Методы вставки и удаления элемента дерева
+	// Методы вставки и удаления элемента
 	virtual void insertElem(const int key) = 0;
 	virtual void deleteElem(const int key) = 0;
 
 	// Методы вывода дерева на экран
-	void print(bool equalElem = false, string message = "") const;
-	void widthPrint(bool equalElem = false, string message = "") const;
-	void inorderPrint(bool equalElem = false, string message = "") const;
-	void preorderPrint(bool equalElem = false, string message = "") const;
-	void postorderPrint(bool equalElem = false, string message = "") const;
+	virtual void print(const string& message = "") const;
+	void widthPrint(const string& message = "") const;
+	void inorderPrint(const string& message = "") const;
+	void preorderPrint(const string& message = "") const;
+	void postorderPrint(const string& message = "") const;
 
-	// Вспомогательные методы работы с деревом
+	// Вспомогательные методы
 	int minElem() const;
 	int maxElem() const;
 	int prevElem(const int key) const;
@@ -50,7 +49,9 @@ public:
 	int getCountNodes() const { return countNodes; }
 	int getHeight() const { return getHeight(root); }
 
-	// Методы удаления всех элементов дерева
+	void exportDotFile(ofstream& filename) const;
+
+	// Методы удаления всех элементов
 	void deleteTree();
 	void deleteTreeOptim();
 
@@ -65,18 +66,20 @@ protected:
 	T* minElem(T* iter) const;
 	T* maxElem(T* iter) const;
 	T* searchElem(T* iter, const int key) const;
-	int getHeight(T* node) const;
+	int getHeight(T* const node) const;
 
 	int Max(const int& a, const int& b) const { return (a > b) ? a : b; }
 	template <typename T>
 	void Swap(T& a, T& b) const { T temp = a; a = b; b = temp; }
 
+	void generateDotFile(ofstream& dotFile, T* node) const;
+
 	// Методы вывода дерева на экран
-	void print(const T* const node, bool equalElem) const;
-	void widthPrint(T* const node, bool equalElem) const;
-	void inorderPrint(const T* const node, bool equalElem) const;
-	void preorderPrint(const T* const node, bool equalElem) const;
-	void postorderPrint(const T* const node, bool equalElem) const;
+	void print(const T* const node) const;
+	void widthPrint(T* const node) const;
+	void inorderPrint(const T* const node) const;
+	void preorderPrint(const T* const node) const;
+	void postorderPrint(const T* const node) const;
 
 	// Метод удаления всех элементов дерева
 	void deleteTree(T*& node);
@@ -137,17 +140,17 @@ T* Tree<T>::maxElem(T* iter) const
 // Метод выводит элементы всего дерева в виде дерева
 // Центрированный (симметричный) обход дерева
 template<typename T>
-void Tree<T>::print(bool equalElem, string message) const
+void Tree<T>::print(const string& message) const
 {
 	cout << message;
-	print(this->root, equalElem);
+	print(this->root);
 	cout << endl;
 }
 
 // Метод выводит элементы поддерева в виде дерева
 // Центрированный (симметричный) обход поддерева
 template<typename T>
-void Tree<T>::print(const T* const node, bool equalElem) const
+void Tree<T>::print(const T* const node) const
 {
 	static int tabs = 0;
 
@@ -155,37 +158,31 @@ void Tree<T>::print(const T* const node, bool equalElem) const
 
 	tabs += 10;
 
-	print(node->right, equalElem);
+	print(node->right);
 
 	for (size_t i = 0; i < tabs; i++)
 	{
 		cout << " ";
 	}
-	cout << node->key << " ";
+	cout << node->key << " -\n";
 
-	if (equalElem)
-	{
-		cout << "[" << node->getCountKey() << "] ";
-	}
-	cout << "-" << endl;
-
-	print(node->left, equalElem);
+	print(node->left);
 
 	tabs -= 10;
 }
 
 // Обход дерева в ширину
 template<class T>
-void Tree<T>::widthPrint(bool equalElem, string message) const
+void Tree<T>::widthPrint(const string& message) const
 {
 	cout << message;
-	widthPrint(this->root, equalElem);
+	widthPrint(this->root);
 	cout << endl;
 }
 
 // Обход поддерева в ширину
 template<class T>
-void Tree<T>::widthPrint(T* const node, bool equalElem) const
+void Tree<T>::widthPrint(T* const node) const
 {
 	if (!node) return;
 
@@ -196,10 +193,6 @@ void Tree<T>::widthPrint(T* const node, bool equalElem) const
 	{
 		T* current = queue.front();
 		cout << current->key << " ";
-		if (equalElem)
-		{
-			cout << "[" << node->getCountKey() << "] ";
-		}
 		if (current->left)
 		{
 			queue.push(current->left);
@@ -216,85 +209,73 @@ void Tree<T>::widthPrint(T* const node, bool equalElem) const
 // Метод выводит элементы всего дерева в отсортированном порядке
 // Центрированный (симметричный) обход дерева
 template<typename T>
-void Tree<T>::inorderPrint(bool equalElem, string message) const
+void Tree<T>::inorderPrint(const string& message) const
 {
 	cout << message;
-	inorderPrint(this->root, equalElem);
+	inorderPrint(this->root);
 	cout << endl;
 }
 
 // Метод выводит элементы поддерева в отсортированном порядке
 // Центрированный (симметричный) обход поддерева
 template<typename T>
-void Tree<T>::inorderPrint(const T* const node, bool equalElem) const
+void Tree<T>::inorderPrint(const T* const node) const
 {
 	if (!node) return;
 
-	inorderPrint(node->left, equalElem);
+	inorderPrint(node->left);
 
 	cout << node->key << " ";
-	if (equalElem)
-	{
-		cout << "[" << node->getCountKey() << "] ";
-	}
 
-	inorderPrint(node->right, equalElem);
+	inorderPrint(node->right);
 }
 
 
 // Метод выводит элементы всего дерева в порядке: вершина, левое поддерево, правое поддерево,
 // Обход дерева в прямом порядке
 template<typename T>
-void Tree<T>::preorderPrint(bool equalElem, string message) const
+void Tree<T>::preorderPrint(const string& message) const
 {
 	cout << message;
-	preorderPrint(this->root, equalElem);
+	preorderPrint(this->root);
 	cout << endl;
 }
 
 // Метод выводит элементы поддерева в порядке: вершина, левое поддерево, правое поддерево
 // Обход поддерева в прямом порядке
 template<typename T>
-void Tree<T>::preorderPrint(const T* const node, bool equalElem) const
+void Tree<T>::preorderPrint(const T* const node) const
 {
 	if (!node) return;
 
 	cout << node->key << " ";
-	if (equalElem)
-	{
-		cout << "[" << node->getCountKey() << "] ";
-	}
 
-	preorderPrint(node->left, equalElem);
-	preorderPrint(node->right, equalElem);
+	preorderPrint(node->left);
+	preorderPrint(node->right);
 }
 
 
 // Метод выводит элементы всего дерева в порядке: левое поддерево, правое поддерево, вершина
 // Обход дерева в обратном порядке
 template<typename T>
-void Tree<T>::postorderPrint(bool equalElem, string message) const
+void Tree<T>::postorderPrint(const string& message) const
 {
 	cout << message;
-	postorderPrint(this->root, equalElem);
+	postorderPrint(this->root);
 	cout << endl;
 }
 
 // Метод выводит элементы поддерева в порядке: левое поддерево, правое поддерево, вершина
 // Обход поддерева в обратном порядке
 template<typename T>
-void Tree<T>::postorderPrint(const T* const node, bool equalElem) const
+void Tree<T>::postorderPrint(const T* const node) const
 {
 	if (!node) return;
 
-	postorderPrint(node->left, equalElem);
-	postorderPrint(node->right, equalElem);
+	postorderPrint(node->left);
+	postorderPrint(node->right);
 
 	cout << node->key << " ";
-	if (equalElem)
-	{
-		cout << "[" << node->getCountKey() << "] ";
-	}
 }
 
 
@@ -500,20 +481,20 @@ T* Tree<T>::searchElem(T* iter, const int key) const
 
 // Метод заполняет дерево случайными или отсортированными данными
 template<typename T>
-bool Tree<T>::fillTree(const int size, const int fillMode)
+bool Tree<T>::fillTree(vector<int>& vec, const int size, const int fillMode)
 {
 	switch (fillMode)
 	{
 	case 0:
-		for (int i = 0; i < size; ++i)
+		for (int i = 0; i < size; i++)
 		{
 			insertElem(i + 10);
 		}
 		break;
 	case 1:
-		for (int i = 0; i < size; ++i)
+		for (int i = 0; i < size; i++)
 		{
-			insertElem(rand() % 10000 + 10);
+			insertElem(vec[i]);
 		}
 		break;
 	default:
@@ -526,25 +507,22 @@ bool Tree<T>::fillTree(const int size, const int fillMode)
 
 // Метод возвращает высоту дерева
 template<typename T>
-int Tree<T>::getHeight(T* node) const
+int Tree<T>::getHeight(T* const node) const
 {
-	int maxHeight = 0;
+	int height = -1;
 
-	if (!node) return maxHeight;
+	if (!node) return height;
 
 	queue<T*> q;
 	q.push(node);
+	T* current = nullptr;
 
 	while (!q.empty())
 	{
-		size_t nodeCount = q.size();
-		if (nodeCount > 0)
+		size_t node_count = q.size();
+		while (node_count)
 		{
-			maxHeight++;
-		}
-		while (nodeCount > 0)
-		{
-			T* current = q.front();
+			current = q.front();
 			q.pop();
 			if (current->left)
 			{
@@ -554,9 +532,35 @@ int Tree<T>::getHeight(T* node) const
 			{
 				q.push(current->right);
 			}
-			nodeCount--;
+			node_count--;
 		}
+		height++;
 	}
 
-	return maxHeight;
+	return height;
+}
+
+template<typename T>
+void Tree<T>::generateDotFile(ofstream& dotFile, T* node) const
+{
+	if (!node) return;
+	if (node->left) 
+	{
+		dotFile << "\"" << node->key << "\" -> \"" << node->left->key << "\";\n";
+	}
+	if (node->right) 
+	{
+		dotFile << "\"" << node->key << "\" -> \"" << node->right->key << "\";\n";
+	}
+	generateDotFile(dotFile, node->left);
+	generateDotFile(dotFile, node->right);
+}
+
+
+template<typename T>
+void Tree<T>::exportDotFile(ofstream& fileTree) const
+{
+	fileTree << "digraph Tree {\n";
+	generateDotFile(fileTree, this->root);
+	fileTree << "}\n\n";
 }

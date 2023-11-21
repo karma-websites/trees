@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Tree.h"
 
 
@@ -10,12 +11,9 @@ class AvlNode
 	AvlNode* left, * right;
 	int key;
     int height;
-	int countKeys;
 
 	AvlNode(int key, AvlNode* left = nullptr, AvlNode* right = nullptr)
-		: key(key), left(left), right(right), countKeys(1), height(0) {}
-
-	int getCountKey() const { return countKeys; }
+		: key(key), left(left), right(right), height(0) {}
 };
 
 
@@ -28,10 +26,10 @@ public:
 
 private:
 
-	// Методы вставки элемента в дерево с последующей балансировкой
+	// Методы вставки элемента с последующей балансировкой
 	void innerInsertElem(AvlNode*& iter, const int key);
-	void updateDepth(AvlNode* const node) const;
-	int getDepth(const AvlNode* const node) const;
+	void updateHgt(AvlNode* const node) const;
+	int getHgt(const AvlNode* const node) const;
 	int getBalance(const AvlNode* const node) const;
 	void rightRotate(AvlNode* const node) const;
 	void leftRotate(AvlNode* const node) const;
@@ -39,7 +37,6 @@ private:
 	int Max(const int& a, const int& b) const { return (a > b) ? a : b; }
 	void Swap(int& a, int& b) const { a = a + b; b = a - b; a = a - b; }
 
-	// Метод удаления элемента дерева
+	// Метод удаления элемента
 	AvlNode* innerDeleteElem(AvlNode* iter, const int key);
 };
-

@@ -1,8 +1,9 @@
 #pragma once
+
 #include "Tree.h"
 
 
-enum Color { RED, BLACK };
+enum Color { BLACK, RED };
 
 
 class RbNode
@@ -11,16 +12,13 @@ class RbNode
 	friend class RedBlackTree;
 
 	RbNode* left, * right, * parent;
-	bool color;
+	Color color;
 	int key;
-	int countKeys;
 
-	RbNode(int key, bool color = RED, RbNode* parent = nullptr,
+	RbNode(int key, Color color = RED, RbNode* parent = nullptr,
 		RbNode* left = nullptr, RbNode* right = nullptr)
 		: key(key), color(color), parent(parent),
-		left(left), right(right), countKeys(1) {}
-
-	int getCountKey() const { return countKeys; }
+		left(left), right(right) {}
 };
 
 
@@ -28,18 +26,22 @@ class RedBlackTree : public Tree<RbNode>
 {
 public:
 
+	void print(const string& message = "") const override;
+
 	void insertElem(const int key) override;
 	void deleteElem(const int key) override;
 
 private:
 
-	// Методы вставки элемента в дерево
-	void fixInsert(RbNode*& node);
-	void rotateLeft(RbNode*& node);
-	void rotateRight(RbNode*& node);
-	void fixDelete(RbNode*& node);
+	// Метод вывода дерева на экран
+	void print(const RbNode* const node, int indent = 5) const;
 
-	// Метод удаления элемента дерева
-	void innerInsertElem(const int key);
-	void innerDeleteElem(RbNode* node);
+	// Методы вставки элемента
+	void leftRotate(RbNode* x);
+	void rightRotate(RbNode* y);
+	void insertFixUp(RbNode* node);
+
+	// Методы удаления элемента
+	void remove(RbNode* node);
+	void removeFixUp(RbNode* node, RbNode* parent);
 };

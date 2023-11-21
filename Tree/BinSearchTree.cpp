@@ -14,12 +14,7 @@ void BinSearchTree::insertElem(const int key)
 
 	while (iter)
 	{
-		if (key == iter->key)
-		{
-			iter->countKeys++;
-			break;
-		}
-		else if (key < iter->key)
+		if (key < iter->key)
 		{
 			if (iter->left)
 			{
@@ -32,7 +27,7 @@ void BinSearchTree::insertElem(const int key)
 				break;
 			}
 		}
-		else
+		else if (key > iter->key)
 		{
 			if (iter->right)
 			{
@@ -45,6 +40,7 @@ void BinSearchTree::insertElem(const int key)
 				break;
 			}
 		}
+		else return;
 	}
 }
 
@@ -78,7 +74,7 @@ void BinSearchTree::innerDeleteElem(BsNode*& node)
 		temp->parent = delNode->parent;
 
 	if (!delNode->parent)
-		root = temp;
+		this->root = temp;
 	else if (delNode == delNode->parent->left)
 		delNode->parent->left = temp;
 	else

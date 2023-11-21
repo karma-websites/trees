@@ -17,28 +17,30 @@ int main()
     BinSearchTree* arrTrees = new BinSearchTree[size_arr_trees];
     //AvlTree* arrTrees = new AvlTree[size_arr_trees];
     //RedBlackTree* arrTrees = new RedBlackTree[size_arr_trees];
-   
+
     cout << "Выберите формат данных для деревьев:\n"
-        "1) Заполнение дерева отсортированными данными\n"
-        "2) Заполнение дерева случайными данными\n"
+        "1) отсортированные\n"
+        "2) случайные\n"
         "Ваш выбор: ";
 
     int fill_mode = getFillMode();
 
     WorkTree::fillTrees(arrTrees, size_arr_trees, fill_mode);
     WorkTree::getHeightTrees(arrTrees, size_arr_trees);
-    WorkTree::printTrees(arrTrees, size_arr_trees);
+    WorkTree::getCountNodesTrees(arrTrees, size_arr_trees);
+    //WorkTree::printTrees(arrTrees, size_arr_trees);
+    //WorkTree::exportFileTrees(arrTrees, size_arr_trees);
     WorkTree::deleteTrees(arrTrees, size_arr_trees);
-    WorkTree::printTrees(arrTrees, size_arr_trees);
-
-    /*BinSearchTree searchTree;
-    for (size_t i = 0; i < 3; i++)
-    {
-        searchTree.insertElem(rand() % 100);
-    }
-    WorkTree::testTree(searchTree);*/
+    //WorkTree::printTrees(arrTrees, size_arr_trees);
 
     delete[] arrTrees;
+
+   /* for (size_t i = 0; i < 10; i++)
+    {
+        arrTrees->insertElem(rand() % 100);
+    }
+
+    WorkTree::testTree(*arrTrees);*/
 
     return 0;
 }

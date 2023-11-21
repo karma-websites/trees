@@ -3,19 +3,19 @@
 
 // Методы отвечают за вставку элемента в дерево
 
-void AvlTree::updateDepth(AvlNode* const node) const
+void AvlTree::updateHgt(AvlNode* const node) const
 {
-	node->height = 1 + Max(getDepth(node->left), getDepth(node->right));
+	node->height = 1 + Max(getHgt(node->left), getHgt(node->right));
 }
 
-int AvlTree::getDepth(const AvlNode* const node) const
+int AvlTree::getHgt(const AvlNode* const node) const
 {
 	return (node == nullptr) ? -1 : node->height;
 }
 
 int AvlTree::getBalance(const AvlNode* const node) const
 {
-	return (node == nullptr) ? 0 : getDepth(node->right) - getDepth(node->left);
+	return (node == nullptr) ? 0 : getHgt(node->right) - getHgt(node->left);
 }
 
 void AvlTree::rightRotate(AvlNode* const node) const
@@ -26,8 +26,8 @@ void AvlTree::rightRotate(AvlNode* const node) const
 	node->left = node->right->left;
 	node->right->left = node->right->right;
 	node->right->right = buffer;
-	updateDepth(node->right);
-	updateDepth(node);
+	updateHgt(node->right);
+	updateHgt(node);
 }
 
 void AvlTree::leftRotate(AvlNode* const node) const
@@ -38,8 +38,8 @@ void AvlTree::leftRotate(AvlNode* const node) const
 	node->right = node->left->right;
 	node->left->right = node->left->left;
 	node->left->left = buffer;
-	updateDepth(node->left);
-	updateDepth(node);
+	updateHgt(node->left);
+	updateHgt(node);
 }
 
 void AvlTree::balance(AvlNode* const node) const
@@ -83,11 +83,7 @@ void AvlTree::innerInsertElem(AvlNode*& iter, const int key)
 	{
 		innerInsertElem(iter->right, key);
 	}
-	else
-	{
-		iter->countKeys++;
-	}
-	updateDepth(iter);
+	updateHgt(iter);
 	balance(iter);
 }
 
@@ -119,8 +115,8 @@ AvlNode* AvlTree::innerDeleteElem(AvlNode* iter, const int key)
 		{
 			AvlNode* temp = iter;
 			iter = (iter->left == nullptr) ? iter->right : iter->left;
-			countNodes--;
 			delete temp;
+			countNodes--;
 		}
 		else
 		{
@@ -131,9 +127,8 @@ AvlNode* AvlTree::innerDeleteElem(AvlNode* iter, const int key)
 	}
 	if (iter)
 	{
-		updateDepth(iter);
+		updateHgt(iter);
 		balance(iter);
 	}
 	return iter;
 }
-
