@@ -452,12 +452,7 @@ T* Tree<T>::nextElem(T* node) const
 template<typename T>
 int Tree<T>::searchElem(const int key) const
 {
-	T* node = searchElem(this->root, key);
-	if (node)
-	{
-		return node->getCountKey();
-	}
-	return 0;
+	return searchElem(this->root, key) ? 1 : 0;
 }
 
 // Метод возвращает указатель на найденный элемент
@@ -540,6 +535,8 @@ int Tree<T>::getHeight(T* const node) const
 	return height;
 }
 
+
+// Метод генерирует файл с вершинами для отрисовки дерева
 template<typename T>
 void Tree<T>::generateDotFile(ofstream& dotFile, T* node) const
 {

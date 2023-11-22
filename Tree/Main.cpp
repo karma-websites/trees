@@ -14,10 +14,11 @@ int main()
     int size_arr_trees = getValue();
     cout << endl;
 
-    BinSearchTree* arrTrees = new BinSearchTree[size_arr_trees];
+    //BinSearchTree* arrTrees = new BinSearchTree[size_arr_trees];
     //AvlTree* arrTrees = new AvlTree[size_arr_trees];
-    //RedBlackTree* arrTrees = new RedBlackTree[size_arr_trees];
+    RedBlackTree* arrTrees = new RedBlackTree[size_arr_trees];
 
+    /*
     cout << "Выберите формат данных для деревьев:\n"
         "1) отсортированные\n"
         "2) случайные\n"
@@ -32,15 +33,16 @@ int main()
     //WorkTree::exportFileTrees(arrTrees, size_arr_trees);
     WorkTree::deleteTrees(arrTrees, size_arr_trees);
     //WorkTree::printTrees(arrTrees, size_arr_trees);
+    */
 
-    delete[] arrTrees;
-
-   /* for (size_t i = 0; i < 10; i++)
+    for (size_t i = 0; i < 10; i++)
     {
         arrTrees->insertElem(rand() % 100);
     }
 
-    WorkTree::testTree(*arrTrees);*/
+    WorkTree::testTree(*arrTrees);
+
+    delete[] arrTrees;
 
     return 0;
 }
